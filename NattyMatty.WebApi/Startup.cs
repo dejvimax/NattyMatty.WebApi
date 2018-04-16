@@ -38,10 +38,10 @@ namespace NattyMatty.WebApi
                     }
                 });
 
-                //TODO: this section of code breaks Azure deployment
                 // Set the comments path for the Swagger JSON and UI.
-                //var xmlFile = $"{Assembly.GetEntryAssembly().GetName().Name}.xml";
-                //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                var xmlFile = $"{Assembly.GetEntryAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                //TODO: this section of code breaks Azure deployment
                 //c.IncludeXmlComments(xmlPath);
             });            
         }
