@@ -38,7 +38,26 @@ namespace NattyMatty.WebApi.Controllers
             return new ObjectResult(product);
         }
 
+        /// <summary>
+        /// Creates a Product.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /Product
+        ///     {
+        ///        "id": 1,
+        ///        "name": "Product1"
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="product"></param>
+        /// <returns>A newly created Product</returns>
+        /// <response code="201">Returns the newly created product</response>
+        /// <response code="400">If the product is null</response>            
         [HttpPost]
+        [ProducesResponseType(typeof(Product), 201)]
+        [ProducesResponseType(400)]
         public IActionResult Create([FromBody] Product product)
         {
             if (product == null)
@@ -73,6 +92,10 @@ namespace NattyMatty.WebApi.Controllers
             return new NoContentResult();
         }
 
+        /// <summary>
+        /// Deletes a specific Product.
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
