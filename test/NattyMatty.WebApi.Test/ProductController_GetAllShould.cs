@@ -3,6 +3,8 @@ using NattyMatty.WebApi.Controllers;
 using NattyMatty.WebApi.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Moq;
+using Microsoft.Extensions.Logging;
 
 namespace NattyMatty.WebApi.Test
 {
@@ -16,8 +18,12 @@ namespace NattyMatty.WebApi.Test
         [Fact]
         public void ReturnListOfProducts()
         {
+            var mockLogger = new Mock<ILogger<ProductController>>();
+            ILogger<ProductController> logger = mockLogger.Object;
+
+
             using (var context = GetContextWithData())
-            using (var controller = new ProductController(context))
+            using (var controller = new ProductController(context, logger))
             {
                 var result = controller.GetAll();
 

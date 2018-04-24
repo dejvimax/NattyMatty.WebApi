@@ -7,6 +7,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System.Reflection;
 using System.IO;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace NattyMatty.WebApi
 {
@@ -46,8 +47,13 @@ namespace NattyMatty.WebApi
             });            
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app,
+            ILoggerFactory loggerFactory)
         {
+            loggerFactory
+                .AddConsole()
+                .AddDebug();
+
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
@@ -59,6 +65,13 @@ namespace NattyMatty.WebApi
             });
 
             app.UseMvc();
+
+            app.Run(async (context) =>
+            {
+                var logger = loggerFactory.CreateLogger("NattyMatty.WebApi.Startup");
+                logger.LogInformation("No endpoint found for request {path}", context.Request.Path);
+                await context.Response.WriteAsync("No endpoint found - try /api/todo.");
+            });
         }
     }
 }
