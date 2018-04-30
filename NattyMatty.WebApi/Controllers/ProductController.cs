@@ -29,6 +29,15 @@ namespace NattyMatty.WebApi.Controllers
         public IEnumerable<Product> GetAll()
         {
             _logger.LogInformation(LoggingEvents.ListProducts, "Listing all products");
+            _logger.LogError(LoggingEvents.ListProducts, "Error: Listing all products");
+
+            _logger.LogTrace("Hello world : Trace");
+            _logger.LogDebug("Hello world : Debug");
+            _logger.LogInformation("Hello world : Information");
+            _logger.LogError("Hello world : Error");
+            _logger.LogCritical("Hello world : Critical");
+            _logger.LogWarning("Hello world : Warning");
+
             return _context.Products.ToList();
         }
 
