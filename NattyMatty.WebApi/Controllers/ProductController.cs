@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using NattyMatty.WebApi.Core;
 using NattyMatty.WebApi.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +11,12 @@ namespace NattyMatty.WebApi.Controllers
     public class ProductController : Controller
     {
         private readonly ProductContext _context;
+        private readonly ILogger _logger;
 
-        public ProductController(ProductContext context)
+        public ProductController(ProductContext context, ILogger<ProductController> logger)
         {
             _context = context;
+            _logger = logger;
 
             if (_context.Products.Count() == 0)
             {
@@ -24,6 +28,16 @@ namespace NattyMatty.WebApi.Controllers
         [HttpGet]
         public IEnumerable<Product> GetAll()
         {
+            _logger.LogInformation(LoggingEvents.ListProducts, "Listing all products");
+            _logger.LogError(LoggingEvents.ListProducts, "Error: Listing all products");
+
+            _logger.LogTrace("Hello world : Trace");
+            _logger.LogDebug("Hello world : Debug");
+            _logger.LogInformation("Hello world : Information");
+            _logger.LogError("Hello world : Error");
+            _logger.LogCritical("Hello world : Critical");
+            _logger.LogWarning("Hello world : Warning");
+
             return _context.Products.ToList();
         }
 

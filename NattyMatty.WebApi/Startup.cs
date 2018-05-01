@@ -7,11 +7,35 @@ using Swashbuckle.AspNetCore.Swagger;
 using System.Reflection;
 using System.IO;
 using System;
+using Microsoft.AspNetCore.Http;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Extensions.Logging.Debug;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Hosting;
 
 namespace NattyMatty.WebApi
 {
     public class Startup
     {
+        public IConfigurationRoot Configuration { get; }
+
+        public Startup(IHostingEnvironment env)
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
+            //if (env.IsEnvironment("Development"))
+            //{
+            //    // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
+            //    builder.AddApplicationInsightsSettings(developerMode: true);
+            //}
+
+            builder.AddEnvironmentVariables();
+            Configuration = builder.Build();
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ProductContext>(opt => opt.UseInMemoryDatabase("ProductList"));
@@ -43,11 +67,28 @@ namespace NattyMatty.WebApi
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 //TODO: this section of code breaks Azure deployment
                 //c.IncludeXmlComments(xmlPath);
-            });            
+            });
+
+            //IConfiguration configuration = new ConfigurationBuilder()
+            //.SetBasePath(env.ContentRootPath)
+            //.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+
+            services.AddLogging(builder => builder
+                .AddConsole()
+                .AddDebug()
+                .AddFilter("System", LogLevel.Information) // Rule for all providers
+                .AddFilter<DebugLoggerProvider>("Microsoft", LogLevel.Trace) // Rule only for debug provider
+                .AddConfiguration(Configuration.GetSection("Logging")));
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app,
+            ILoggerFactory loggerFactory)
         {
+            /*loggerFactory
+                .AddConsole()
+                .AddDebug();*/
+
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
@@ -59,6 +100,27 @@ namespace NattyMatty.WebApi
             });
 
             app.UseMvc();
+
+            app.Run(async (context) =>
+            {
+                /*var logger = loggerFactory.CreateLogger("NattyMatty.WebApi.Startup");
+                logger.LogTrace("Hello world : Trace");
+                logger.LogDebug("Hello world : Debug");
+                logger.LogInformation("Hello world : Information");
+                logger.LogError("Hello world : Error");
+                logger.LogInformation("No endpoint found for request {path}", context.Request.Path);*/
+                await context.Response.WriteAsync("No endpoint found - try /api/todo.");
+            });
+
+#if DEBUG
+            //https://stackoverflow.com/questions/32057441/disable-application-insights-in-debug
+            TelemetryConfiguration.Active.DisableTelemetry = true;
+#endif
+            //https://github.com/aspnet/Home/issues/2051
+            //var configuration = app.ApplicationServices.GetService<TelemetryConfiguration>();
+            //configuration.DisableTelemetry = true;
+
+
         }
     }
 }
