@@ -38,8 +38,17 @@ namespace NattyMatty.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ProductContext>(opt => opt.UseInMemoryDatabase("ProductList"));
+            /*
+            var connection = @"Server=HOME_MEDIA_PC\SQLEXPRESS;Database=NattyMattyDb;Trusted_Connection=True;ConnectRetryCount=0";
+            services.AddDbContext<ProductContext>(options => options.UseSqlServer(connection));
+             */
+            //services.AddDbContext<ProductContext>(opt => opt.UseInMemoryDatabase("ProductList"));
+
             services.AddMvc();
+
+            services.AddEntityFrameworkSqlServer();
+
+            services.AddDbContext<ProductContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             // Register the Swagger generator, defining one or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -80,6 +89,8 @@ namespace NattyMatty.WebApi
                 .AddFilter("System", LogLevel.Information) // Rule for all providers
                 .AddFilter<DebugLoggerProvider>("Microsoft", LogLevel.Trace) // Rule only for debug provider
                 .AddConfiguration(Configuration.GetSection("Logging")));
+
+            
         }
 
         public void Configure(IApplicationBuilder app,
