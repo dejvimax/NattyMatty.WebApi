@@ -12,6 +12,7 @@ using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging.Debug;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
+using NattyMatty.WebApi.Data;
 
 namespace NattyMatty.WebApi
 {
@@ -38,8 +39,17 @@ namespace NattyMatty.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ProductContext>(opt => opt.UseInMemoryDatabase("ProductList"));
+            /*
+            var connection = @"Server=HOME_MEDIA_PC\SQLEXPRESS;Database=NattyMattyDb;Trusted_Connection=True;ConnectRetryCount=0";
+            services.AddDbContext<ProductContext>(options => options.UseSqlServer(connection));
+             */
+            //services.AddDbContext<ProductContext>(opt => opt.UseInMemoryDatabase("ProductList"));
+
             services.AddMvc();
+
+            services.AddEntityFrameworkSqlServer();
+
+            services.AddDbContext<ProductContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             // Register the Swagger generator, defining one or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -80,6 +90,8 @@ namespace NattyMatty.WebApi
                 .AddFilter("System", LogLevel.Information) // Rule for all providers
                 .AddFilter<DebugLoggerProvider>("Microsoft", LogLevel.Trace) // Rule only for debug provider
                 .AddConfiguration(Configuration.GetSection("Logging")));
+
+            
         }
 
         public void Configure(IApplicationBuilder app,
@@ -119,6 +131,17 @@ namespace NattyMatty.WebApi
             //https://github.com/aspnet/Home/issues/2051
             //var configuration = app.ApplicationServices.GetService<TelemetryConfiguration>();
             //configuration.DisableTelemetry = true;
+
+            // Create a service scope to get an ProductContext instance using DI
+            using (var serviceScope =
+                app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetService<ProductContext>();
+                // Create the Db if it doesn't exist and applies any pending migration.
+                dbContext.Database.Migrate();
+                // Seed the Db.
+                DbSeeder.Seed(dbContext);
+            }
 
 
         }
