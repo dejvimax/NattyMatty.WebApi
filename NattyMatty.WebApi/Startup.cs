@@ -12,6 +12,7 @@ using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging.Debug;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
+using NattyMatty.WebApi.Data;
 
 namespace NattyMatty.WebApi
 {
@@ -130,6 +131,17 @@ namespace NattyMatty.WebApi
             //https://github.com/aspnet/Home/issues/2051
             //var configuration = app.ApplicationServices.GetService<TelemetryConfiguration>();
             //configuration.DisableTelemetry = true;
+
+            // Create a service scope to get an ProductContext instance using DI
+            using (var serviceScope =
+                app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetService<ProductContext>();
+                // Create the Db if it doesn't exist and applies any pending migration.
+                dbContext.Database.Migrate();
+                // Seed the Db.
+                DbSeeder.Seed(dbContext);
+            }
 
 
         }

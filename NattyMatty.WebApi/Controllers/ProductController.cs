@@ -18,11 +18,12 @@ namespace NattyMatty.WebApi.Controllers
             _context = context;
             _logger = logger;
 
+            /*
             if (_context.Products.Count() == 0)
             {
                 _context.Products.Add(new Product { Name = "Sleeping Beauty" });
                 _context.SaveChanges();
-            }
+            }*/
         }
 
         [HttpGet]
