@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging.Debug;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using NattyMatty.WebApi.Data;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace NattyMatty.WebApi
 {
@@ -91,15 +92,21 @@ namespace NattyMatty.WebApi
                 .AddFilter<DebugLoggerProvider>("Microsoft", LogLevel.Trace) // Rule only for debug provider
                 .AddConfiguration(Configuration.GetSection("Logging")));
 
-            
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
+
+
         }
 
         public void Configure(IApplicationBuilder app,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory, IHostingEnvironment env)
         {
             /*loggerFactory
                 .AddConsole()
                 .AddDebug();*/
+            app.UseSpaStaticFiles();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
@@ -143,7 +150,13 @@ namespace NattyMatty.WebApi
                 DbSeeder.Seed(dbContext);
             }
 
-
+            app.UseSpa(spa =>
+            {
+                if (env.IsDevelopment())
+                {
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                }
+            });
         }
     }
 }
