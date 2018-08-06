@@ -106,7 +106,7 @@ namespace NattyMatty.WebApi
             /*loggerFactory
                 .AddConsole()
                 .AddDebug();*/
-            app.UseSpaStaticFiles();
+            //app.UseSpaStaticFiles();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
@@ -117,20 +117,28 @@ namespace NattyMatty.WebApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "NattyMatty API V1");
                 //c.RoutePrefix = string.Empty;
             });
+			
+			// app.UseStaticFiles();
+            // app.UseSpaStaticFiles();
 
             app.UseMvc();
+			app.UseDefaultFiles();
+			app.UseStaticFiles();
+			
+			app.UseSpaStaticFiles();
 
+			/*
             app.Run(async (context) =>
             {
-                /*var logger = loggerFactory.CreateLogger("NattyMatty.WebApi.Startup");
-                logger.LogTrace("Hello world : Trace");
-                logger.LogDebug("Hello world : Debug");
-                logger.LogInformation("Hello world : Information");
-                logger.LogError("Hello world : Error");
-                logger.LogInformation("No endpoint found for request {path}", context.Request.Path);*/
+                // var logger = loggerFactory.CreateLogger("NattyMatty.WebApi.Startup");
+                // logger.LogTrace("Hello world : Trace");
+                // logger.LogDebug("Hello world : Debug");
+                // logger.LogInformation("Hello world : Information");
+                // logger.LogError("Hello world : Error");
+                // logger.LogInformation("No endpoint found for request {path}", context.Request.Path);
                 await context.Response.WriteAsync("No endpoint found - try /api/todo.");
             });
-
+			*/
 #if DEBUG
             //https://stackoverflow.com/questions/32057441/disable-application-insights-in-debug
             TelemetryConfiguration.Active.DisableTelemetry = true;
@@ -150,11 +158,27 @@ namespace NattyMatty.WebApi
                 DbSeeder.Seed(dbContext);
             }
 
-            app.UseSpa(spa =>
+            // app.UseSpa(spa =>
+            // {
+                // spa.Options.SourcePath = "ClientApp";
+
+                // if (env.IsDevelopment())
+                // {
+                    // spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                // }
+            // });
+			
+			app.UseSpa(spa =>
             {
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
+
+                spa.Options.SourcePath = "ClientApp";
+
                 if (env.IsDevelopment())
                 {
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                    //spa.UseAngularCliServer(npmScript: "start");
+					spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
         }
