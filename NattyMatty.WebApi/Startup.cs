@@ -7,8 +7,6 @@ using Swashbuckle.AspNetCore.Swagger;
 using System.Reflection;
 using System.IO;
 using System;
-using Microsoft.AspNetCore.Http;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging.Debug;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
@@ -150,10 +148,11 @@ namespace NattyMatty.WebApi
                 await context.Response.WriteAsync("No endpoint found - try /api/todo.");
             });
 			*/
+            /*
 #if DEBUG
             //https://stackoverflow.com/questions/32057441/disable-application-insights-in-debug
             TelemetryConfiguration.Active.DisableTelemetry = true;
-#endif
+#endif*/
             //https://github.com/aspnet/Home/issues/2051
             //var configuration = app.ApplicationServices.GetService<TelemetryConfiguration>();
             //configuration.DisableTelemetry = true;
