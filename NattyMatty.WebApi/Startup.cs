@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging.Debug;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using NattyMatty.WebApi.Data;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace NattyMatty.WebApi
 {
@@ -91,15 +92,21 @@ namespace NattyMatty.WebApi
                 .AddFilter<DebugLoggerProvider>("Microsoft", LogLevel.Trace) // Rule only for debug provider
                 .AddConfiguration(Configuration.GetSection("Logging")));
 
-            
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
+
+
         }
 
         public void Configure(IApplicationBuilder app,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory, IHostingEnvironment env)
         {
             /*loggerFactory
                 .AddConsole()
                 .AddDebug();*/
+            //app.UseSpaStaticFiles();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
@@ -111,19 +118,38 @@ namespace NattyMatty.WebApi
                 //c.RoutePrefix = string.Empty;
             });
 
-            app.UseMvc();
+            // app.UseStaticFiles();
+            // app.UseSpaStaticFiles();
 
-            app.Run(async (context) =>
+            app.UseMvc(routes =>
             {
-                /*var logger = loggerFactory.CreateLogger("NattyMatty.WebApi.Startup");
-                logger.LogTrace("Hello world : Trace");
-                logger.LogDebug("Hello world : Debug");
-                logger.LogInformation("Hello world : Information");
-                logger.LogError("Hello world : Error");
-                logger.LogInformation("No endpoint found for request {path}", context.Request.Path);*/
-                await context.Response.WriteAsync("No endpoint found - try /api/todo.");
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Home", action = "Index" });
             });
 
+            app.UseDefaultFiles();
+
+			app.UseStaticFiles();
+			
+			app.UseSpaStaticFiles();
+
+			/*
+            app.Run(async (context) =>
+            {
+                // var logger = loggerFactory.CreateLogger("NattyMatty.WebApi.Startup");
+                // logger.LogTrace("Hello world : Trace");
+                // logger.LogDebug("Hello world : Debug");
+                // logger.LogInformation("Hello world : Information");
+                // logger.LogError("Hello world : Error");
+                // logger.LogInformation("No endpoint found for request {path}", context.Request.Path);
+                await context.Response.WriteAsync("No endpoint found - try /api/todo.");
+            });
+			*/
 #if DEBUG
             //https://stackoverflow.com/questions/32057441/disable-application-insights-in-debug
             TelemetryConfiguration.Active.DisableTelemetry = true;
@@ -143,7 +169,29 @@ namespace NattyMatty.WebApi
                 DbSeeder.Seed(dbContext);
             }
 
+            // app.UseSpa(spa =>
+            // {
+                // spa.Options.SourcePath = "ClientApp";
 
+                // if (env.IsDevelopment())
+                // {
+                    // spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                // }
+            // });
+			
+			app.UseSpa(spa =>
+            {
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
+
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    //spa.UseAngularCliServer(npmScript: "start");
+					spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                }
+            });
         }
     }
 }
