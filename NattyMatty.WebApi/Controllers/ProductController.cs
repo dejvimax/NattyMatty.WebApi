@@ -4,6 +4,7 @@ using NattyMatty.WebApi.Core;
 using NattyMatty.WebApi.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace NattyMatty.WebApi.Controllers
 {
@@ -27,7 +28,27 @@ namespace NattyMatty.WebApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Product> GetAll()
+        public IActionResult GetAll()
+        {
+            _logger.LogInformation(LoggingEvents.ListProducts, "Listing all products");
+            _logger.LogError(LoggingEvents.ListProducts, "Error: Listing all products");
+
+            _logger.LogTrace("Hello world : Trace");
+            _logger.LogDebug("Hello world : Debug");
+            _logger.LogInformation("Hello world : Information");
+            _logger.LogError("Hello world : Error");
+            _logger.LogCritical("Hello world : Critical");
+            _logger.LogWarning("Hello world : Warning");
+
+            var result = _context.Products.ToList();
+
+            return new JsonResult(result
+                , new JsonSerializerSettings()
+                {
+                    Formatting = Formatting.Indented
+                });
+        }
+        /*public IEnumerable<Product> GetAll()
         {
             _logger.LogInformation(LoggingEvents.ListProducts, "Listing all products");
             _logger.LogError(LoggingEvents.ListProducts, "Error: Listing all products");
@@ -40,17 +61,24 @@ namespace NattyMatty.WebApi.Controllers
             _logger.LogWarning("Hello world : Warning");
 
             return _context.Products.ToList();
-        }
+        }*/
 
         [HttpGet("{id}", Name = "GetProduct")]
         public IActionResult GetById(long id)
         {
             var product = _context.Products.FirstOrDefault(t => t.Id == id);
+
             if (product == null)
             {
                 return NotFound();
             }
-            return new ObjectResult(product);
+
+            return new JsonResult(product
+                , new JsonSerializerSettings()
+                {
+                    Formatting = Formatting.Indented
+                });
+            //return new ObjectResult(product);
         }
 
         /// <summary>

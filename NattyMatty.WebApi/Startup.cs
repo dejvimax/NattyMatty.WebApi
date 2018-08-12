@@ -117,12 +117,23 @@ namespace NattyMatty.WebApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "NattyMatty API V1");
                 //c.RoutePrefix = string.Empty;
             });
-			
-			// app.UseStaticFiles();
+
+            // app.UseStaticFiles();
             // app.UseSpaStaticFiles();
 
-            app.UseMvc();
-			app.UseDefaultFiles();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Home", action = "Index" });
+            });
+
+            app.UseDefaultFiles();
+
 			app.UseStaticFiles();
 			
 			app.UseSpaStaticFiles();

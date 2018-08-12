@@ -30,6 +30,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\app\components\product\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -49,9 +50,17 @@
   </ItemGroup>
   
   <ItemGroup>
+    <None Remove="ClientApp\src\app\interfaces\Product.ts" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.2" />
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\interfaces\Product.ts" />
   </ItemGroup>  
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
