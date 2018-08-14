@@ -7,18 +7,24 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { ProductComponent } from './components/product/product.component';
-import { ProductListComponent } from './components/product-list/product-list.component';
+import { ProductsComponent } from './components/products/products.component';
+import { NavMenuComponent } from './components/navmenu/navmenu.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ProductComponent,
-    ProductListComponent
+    ProductsComponent,
+    NavMenuComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule
+    RouterModule.forRoot([
+      {path: '', redirectTo: 'home', pathMatch:'full'},
+      {path: 'home', component: ProductsComponent},
+      {path: '**', redirectTo: 'home'}
+    ])
   ],
 
   providers: [{ provide: 'BASE_URL', useFactory: getBaseUrl }],
