@@ -30,7 +30,13 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes),
+    RouterModule.forRoot([
+      {path: '', redirectTo: 'home', pathMatch:'full'},
+      {path: 'home', component: HomeComponent},
+      {path: 'product/:id', component: ProductComponent},
+      {path: '**', redirectTo: 'home'}
+    ]),
+    //RouterModule.forRoot(appRoutes),
     // RouterModule.forRoot([
     //   {path: '', redirectTo: 'home', pathMatch:'full'},
     //   {path: 'home', component: HomeComponent},

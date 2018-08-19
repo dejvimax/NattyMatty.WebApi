@@ -8,8 +8,23 @@
   </li>
 </ul> -->
 
-<ul class="products">
+<!-- <li *ngFor="let quiz of quizzes"
+        [class.selected]="quiz === selectedQuiz"
+        (click)="onSelect(quiz)">
+        <span>{{quiz.Title}}</span>
+    </li> -->
+
+    <ul class="products">
+      <li *ngFor="let product of products"
+          [class.selected]="product === selectedProduct"
+          (click)="onSelect(product)">
+        <span>{{product.Name}}</span> 
+      </li>
+    </ul>
+
+<!-- <ul class="products">
   <li *ngFor="let product of products">
     <span>{{product.Id}}</span> {{product.Name}}
   </li>
-</ul>
+</ul> -->
+<!-- <app-product *ngIf="selectedProduct" [product]="selectedProduct"></app-product> -->

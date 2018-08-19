@@ -1,3 +1,17 @@
-<p>
+ <!-- <p>
   product works!
-</p>
+</p> -->
+
+<div *ngIf="product" class="product">
+  <h2>{{product.Name}}</h2>
+  <!-- <ul>
+      <li>
+          <label>Title:</label>
+          <input [(ngModel)]="product.Title" placeholder="Insert the title..." />
+      </li>
+      <li>
+          <label>Description:</label>
+          <textarea [(ngModel)]=" product.Description" placeholder="Insert a suitable description..."></textarea>
+      </li>
+  </ul> -->
+</div>
