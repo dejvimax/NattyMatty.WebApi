@@ -2,6 +2,8 @@ import { Component, Inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 
+import { Product } from '../../models/product.model'; 
+
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
@@ -34,7 +36,7 @@ export class ProductComponent {
             this.router.navigate(["product"]);
         }
     }
-  }
+}
 
   /*
 import { Component, OnInit } from '@angular/core';

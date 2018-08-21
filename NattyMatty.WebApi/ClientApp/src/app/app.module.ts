@@ -15,6 +15,8 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
 
+import { ProductService } from './product.service';
+
 const appRoutes: Routes = [
   { path: 'app-products', component: ProductsComponent }  
 ];
@@ -25,7 +27,8 @@ const appRoutes: Routes = [
     ProductComponent,
     ProductsComponent,
     NavMenuComponent, 
-    HomeComponent, NavBarComponent
+    HomeComponent, 
+    NavBarComponent    
   ],
   imports: [
     BrowserModule,
@@ -51,7 +54,10 @@ const appRoutes: Routes = [
     MatListModule
   ],
 
-  providers: [{ provide: 'BASE_URL', useFactory: getBaseUrl }],
+  providers: [
+    { provide: 'BASE_URL', useFactory: getBaseUrl },
+    ProductService 
+  ],
   //providers: [  { provide: BASE_URL , useValue: "http://localhost:/api" }],
   //providers: [],
   bootstrap: [AppComponent]
