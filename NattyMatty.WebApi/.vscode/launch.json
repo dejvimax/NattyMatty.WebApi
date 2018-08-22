@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/bin/Debug/netcoreapp2.0/NattyMatty.WebApi.dll",
+            "program": "${workspaceRoot}/bin/Debug/netcoreapp2.1/NattyMatty.WebApi.dll",
             "args": [],
             "cwd": "${workspaceRoot}",
             "stopAtEntry": false,

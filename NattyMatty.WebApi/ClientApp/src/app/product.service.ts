@@ -29,4 +29,12 @@ export class ProductService {
 
     //return this.products;
   }
+
+  /** GET product by id. Will 404 if id not found */
+  getProduct(id: number): Observable<Product> {
+    const url = `${this.baseUrl}${this._productsUrl}${id}`;
+
+    console.log("URL in getProduct service:" + url);
+    return this.http.get<Product>(url);
+  }
 }

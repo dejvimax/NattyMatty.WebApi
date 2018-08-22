@@ -2,6 +2,7 @@ import { Component, Inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 
+import { ProductService } from '../../product.service';
 import { Product } from '../../models/product.model'; 
 
 @Component({
@@ -16,7 +17,8 @@ export class ProductComponent {
     constructor(private activatedRoute: ActivatedRoute,
         private router: Router,
         private http: HttpClient,
-        @Inject('BASE_URL') private baseUrl: string) {
+        @Inject('BASE_URL') private baseUrl: string,
+        private productService: ProductService) {
 
         // create an empty object from the Product interface
         this.product = <Product>{};
@@ -24,12 +26,23 @@ export class ProductComponent {
         var id = +this.activatedRoute.snapshot.params["id"];
         console.log(id);
         if (id) {
+
+            console.log("Calling Product Service");
+            this.productService.getProduct(id)
+                .subscribe(product => {this.product = product;},
+                error => console.error(error));
+            
+            console.log("After Calling Product Service");
+
+            /* 
             var url = this.baseUrl + "api/product/" + id;
             //var url = "http://localhost:54895/product/" + id;
 
             this.http.get<Product>(url).subscribe(result => {
                 this.product = result;
             }, error => console.error(error));
+
+            */
         }
         else {
             console.log("Invalid id: routing back to product...");
