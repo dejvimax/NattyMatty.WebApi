@@ -32,17 +32,7 @@ export class ProductComponent {
                 .subscribe(product => {this.product = product;},
                 error => console.error(error));
             
-            console.log("After Calling Product Service");
-
-            /* 
-            var url = this.baseUrl + "api/product/" + id;
-            //var url = "http://localhost:54895/product/" + id;
-
-            this.http.get<Product>(url).subscribe(result => {
-                this.product = result;
-            }, error => console.error(error));
-
-            */
+            console.log("After Calling Product Service");            
         }
         else {
             console.log("Invalid id: routing back to product...");
