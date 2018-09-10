@@ -1,0 +1,15 @@
+.product {
+    margin: 5px;
+    padding: 5px 10px;
+    border: 1px solid black;
+    background-color: #dddddd;
+    width: 300px;
+}
+
+    .product * {
+        vertical-align: middle;
+    }
+
+    .product ul li {
+        padding: 5px 0;
+    }

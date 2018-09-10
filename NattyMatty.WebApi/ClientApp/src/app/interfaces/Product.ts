@@ -1,4 +1,4 @@
-interface Product{
-  Id: number,
-  Name: string
-}
+// interface Product{
+//   Id: number,
+//   Name: string
+// }
