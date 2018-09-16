@@ -2,8 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule} from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
-// import { InjectionToken } from '@angular/core';
-//export const BASE_URL = new InjectionToken<string>('BASE_URL');
 
 import { AppComponent } from './app.component';
 import { ProductComponent } from './components/product/product.component';
@@ -39,12 +37,7 @@ const appRoutes: Routes = [
       {path: 'product/:id', component: ProductComponent},
       {path: '**', redirectTo: 'home'}
     ]),
-    //RouterModule.forRoot(appRoutes),
-    // RouterModule.forRoot([
-    //   {path: '', redirectTo: 'home', pathMatch:'full'},
-    //   {path: 'home', component: HomeComponent},
-    //   {path: '**', redirectTo: 'home'}
-    // ]),
+    //RouterModule.forRoot(appRoutes),    
     BrowserAnimationsModule,
     LayoutModule,
     MatToolbarModule,
@@ -57,9 +50,7 @@ const appRoutes: Routes = [
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl },
     ProductService 
-  ],
-  //providers: [  { provide: BASE_URL , useValue: "http://localhost:/api" }],
-  //providers: [],
+  ],  
   bootstrap: [AppComponent]
 })
 export class AppModule { }
