@@ -14,23 +14,7 @@ export class ProductsComponent implements OnInit {
     @Input() class: string;
     title: string;
     selectedProduct: Product;
-    products: Product[];
-
-    // constructor(private http: HttpClient,
-    //     @Inject('BASE_URL') private baseUrl: string,
-    //     private router: Router) {
-    // }
-
-    //   constructor(http: HttpClient,
-    //         @Inject('BASE_URL') baseUrl: string) {
-    //         this.title = 'Latest products';
-    // 		var url = baseUrl + 'api/product/';
-    //         // this.baseUrl = baseUrl;
-
-    // 		http.get<Product[]>(url).subscribe(result => {
-    // 			this.products = result;
-    // 		}, error => console.error(error));
-    //     }
+    products: Product[];    
 
     constructor(private http: HttpClient,
         @Inject('BASE_URL') private baseUrl: string,
@@ -43,18 +27,13 @@ export class ProductsComponent implements OnInit {
             " instantiated with the following class: "
             + this.class);
 
-        this.title = 'Latest products';
-
-        //var url = "http://localhost:54895/product/";
+        this.title = 'Latest products';        
 
         var url = this.baseUrl + "api/product/";
 
         console.log("URL:" + url);
 
-        // this.products = this.productService.getProducts();
-
         this.getProducts();
-
     
         console.log("End of ProductsComponent ngOnInit");
 
@@ -76,15 +55,9 @@ export class ProductsComponent implements OnInit {
     }
 
     getProducts(): void {
-        // this.products = this.productService.getProducts();
-
         console.log("getProducts in Component");
         this.productService.getProducts()
             .subscribe(products => {this.products = products;},
-                error => console.error(error));
-
-            // this.http.get<Product[]>(url).subscribe(result => {
-    //   this.products = result;
-    // }, error => console.error(error));
+                error => console.error(error));            
       }
 }

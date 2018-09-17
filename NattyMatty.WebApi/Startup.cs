@@ -26,24 +26,12 @@ namespace NattyMatty.WebApi
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-            //if (env.IsEnvironment("Development"))
-            //{
-            //    // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
-            //    builder.AddApplicationInsightsSettings(developerMode: true);
-            //}
-
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
         }
 
         public void ConfigureServices(IServiceCollection services)
-        {
-            /*
-            var connection = @"Server=HOME_MEDIA_PC\SQLEXPRESS;Database=NattyMattyDb;Trusted_Connection=True;ConnectRetryCount=0";
-            services.AddDbContext<ProductContext>(options => options.UseSqlServer(connection));
-             */
-            //services.AddDbContext<ProductContext>(opt => opt.UseInMemoryDatabase("ProductList"));
-
+        {            
             services.AddMvc();
 
             services.AddEntityFrameworkSqlServer();
@@ -76,12 +64,7 @@ namespace NattyMatty.WebApi
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 //TODO: this section of code breaks Azure deployment
                 //c.IncludeXmlComments(xmlPath);
-            });
-
-            //IConfiguration configuration = new ConfigurationBuilder()
-            //.SetBasePath(env.ContentRootPath)
-            //.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-
+            });            
 
             services.AddLogging(builder => builder
                 .AddConsole()
@@ -94,18 +77,10 @@ namespace NattyMatty.WebApi
             {
                 configuration.RootPath = "ClientApp/dist";
             });
-
-
         }
 
-        public void Configure(IApplicationBuilder app,
-            ILoggerFactory loggerFactory, IHostingEnvironment env)
-        {
-            /*loggerFactory
-                .AddConsole()
-                .AddDebug();*/
-            //app.UseSpaStaticFiles();
-
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {    
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
@@ -114,10 +89,7 @@ namespace NattyMatty.WebApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "NattyMatty API V1");
                 //c.RoutePrefix = string.Empty;
-            });
-
-            // app.UseStaticFiles();
-            // app.UseSpaStaticFiles();
+            });           
 
             app.UseMvc(routes =>
             {
@@ -136,18 +108,6 @@ namespace NattyMatty.WebApi
 			
 			app.UseSpaStaticFiles();
 
-			/*
-            app.Run(async (context) =>
-            {
-                // var logger = loggerFactory.CreateLogger("NattyMatty.WebApi.Startup");
-                // logger.LogTrace("Hello world : Trace");
-                // logger.LogDebug("Hello world : Debug");
-                // logger.LogInformation("Hello world : Information");
-                // logger.LogError("Hello world : Error");
-                // logger.LogInformation("No endpoint found for request {path}", context.Request.Path);
-                await context.Response.WriteAsync("No endpoint found - try /api/todo.");
-            });
-			*/
             /*
 #if DEBUG
             //https://stackoverflow.com/questions/32057441/disable-application-insights-in-debug
@@ -166,17 +126,7 @@ namespace NattyMatty.WebApi
                 dbContext.Database.Migrate();
                 // Seed the Db.
                 DbSeeder.Seed(dbContext);
-            }
-
-            // app.UseSpa(spa =>
-            // {
-                // spa.Options.SourcePath = "ClientApp";
-
-                // if (env.IsDevelopment())
-                // {
-                    // spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
-                // }
-            // });
+            }            
 			
 			app.UseSpa(spa =>
             {

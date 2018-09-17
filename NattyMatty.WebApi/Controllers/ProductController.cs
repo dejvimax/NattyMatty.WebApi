@@ -31,14 +31,12 @@ namespace NattyMatty.WebApi.Controllers
         public IActionResult GetAll()
         {
             _logger.LogInformation(LoggingEvents.ListProducts, "Listing all products");
-            _logger.LogError(LoggingEvents.ListProducts, "Error: Listing all products");
-
-            _logger.LogTrace("Hello world : Trace");
+            
+            /*_logger.LogTrace("Hello world : Trace");
             _logger.LogDebug("Hello world : Debug");
-            _logger.LogInformation("Hello world : Information");
-            _logger.LogError("Hello world : Error");
+            _logger.LogInformation("Hello world : Information");            
             _logger.LogCritical("Hello world : Critical");
-            _logger.LogWarning("Hello world : Warning");
+            _logger.LogWarning("Hello world : Warning");*/
 
             var result = _context.Products.ToList();
 
@@ -47,25 +45,12 @@ namespace NattyMatty.WebApi.Controllers
                 {
                     Formatting = Formatting.Indented
                 });
-        }
-        /*public IEnumerable<Product> GetAll()
-        {
-            _logger.LogInformation(LoggingEvents.ListProducts, "Listing all products");
-            _logger.LogError(LoggingEvents.ListProducts, "Error: Listing all products");
-
-            _logger.LogTrace("Hello world : Trace");
-            _logger.LogDebug("Hello world : Debug");
-            _logger.LogInformation("Hello world : Information");
-            _logger.LogError("Hello world : Error");
-            _logger.LogCritical("Hello world : Critical");
-            _logger.LogWarning("Hello world : Warning");
-
-            return _context.Products.ToList();
-        }*/
+        }        
 
         [HttpGet("{id}", Name = "GetProduct")]
         public IActionResult GetById(long id)
         {
+            _logger.LogInformation(LoggingEvents.GetProduct, $"Get product: '{id}'");
             var product = _context.Products.FirstOrDefault(t => t.Id == id);
 
             if (product == null)
@@ -73,12 +58,13 @@ namespace NattyMatty.WebApi.Controllers
                 return NotFound();
             }
 
+            _logger.LogInformation(LoggingEvents.GetProduct, $"Product '{product.Name}' found for Id: '{id}'");
+            
             return new JsonResult(product
                 , new JsonSerializerSettings()
                 {
                     Formatting = Formatting.Indented
                 });
-            //return new ObjectResult(product);
         }
 
         /// <summary>

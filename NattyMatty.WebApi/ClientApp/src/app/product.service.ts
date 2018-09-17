@@ -21,20 +21,21 @@ export class ProductService {
 
     console.log("URL in product service:" + url);
 
-    return this.http.get<Product[]>(url);
+    console.log("Get All Products");
+
+    return this.http.get<Product[]>(url);    
 
     // this.http.get<Product[]>(url).subscribe(result => {
     //   this.products = result;
-    // }, error => console.error(error));
-
-    //return this.products;
+    // }, error => console.error(error));    
   }
 
   /** GET product by id. Will 404 if id not found */
   getProduct(id: number): Observable<Product> {
     const url = `${this.baseUrl}${this._productsUrl}${id}`;
 
-    console.log("URL in getProduct service:" + url);
+    console.log("Get Product by Id:" + id);
+
     return this.http.get<Product>(url);
   }
 }
