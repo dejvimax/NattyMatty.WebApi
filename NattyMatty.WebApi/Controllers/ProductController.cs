@@ -58,7 +58,7 @@ namespace NattyMatty.WebApi.Controllers
             {
                 return NotFound(new
                 {
-                    Error = String.Format("Quiz ID {0} has not been found", id)
+                    Error = String.Format("Product ID {0} has not been found", id)
                 });
             }
 
