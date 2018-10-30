@@ -5,6 +5,7 @@ using NattyMatty.WebApi.Models;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using System;
 
 namespace NattyMatty.WebApi.Controllers
 {
@@ -55,7 +56,10 @@ namespace NattyMatty.WebApi.Controllers
 
             if (product == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    Error = String.Format("Quiz ID {0} has not been found", id)
+                });
             }
 
             _logger.LogInformation(LoggingEvents.GetProduct, $"Product '{product.Name}' found for Id: '{id}'");
