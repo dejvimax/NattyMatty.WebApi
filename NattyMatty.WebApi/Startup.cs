@@ -122,6 +122,7 @@ namespace NattyMatty.WebApi
                 app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetService<ProductContext>();
+                /* */
                 // Create the Db if it doesn't exist and applies any pending migration.
                 dbContext.Database.Migrate();
                 // Seed the Db.
